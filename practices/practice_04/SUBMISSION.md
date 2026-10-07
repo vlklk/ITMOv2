@@ -61,7 +61,30 @@ FAIL: risks[2].evidence: не найдено в app/api.py:9 (там: 'def creat
 
 **Где пришлось вмешаться.** В первой попытке ([`04a_mcp_no_call.md`](evidence/04a_mcp_no_call.md)) агент не вызвал инструмент ни разу и выдумал ответы: для `../../README.md` написал «invalid diff format», хотя сервер отвечает «path must stay inside the project root». Повтор с требованием «реально вызови и перескажи дословно» дал три настоящих вызова. Вывод: наличие подключённого MCP не означает, что агент им воспользовался, — проверять нужно по событиям вызова.
 
-## 4. Рефлексия
+## 4. Проект «Тетрис»: две фичи со скачанными skills
+
+Отдельный небольшой проект [`tetris/`](tetris/) по маршруту практики. Исполнитель — субагенты Claude Code; среда — та же, что требует практика.
+
+| Компонент | Файл | Зачем |
+|---|---|---|
+| Правила | [`tetris/AGENTS.md`](tetris/AGENTS.md) (+ `CLAUDE.md` → `@AGENTS.md`) | Контракт, команда проверки, skills, MCP, запреты |
+| Скачанные skills | [`tetris/.claude/skills/`](tetris/.claude/skills/) | `frontend-design` (anthropics/skills@41bbe19, Apache-2.0) — дизайн без шаблонов; `test-driven-development` (obra/superpowers@b9e75dd, MIT) — логика через падающий тест |
+| Hook | [`tetris/.claude/hooks/check-after-edit.sh`](tetris/.claude/hooks/check-after-edit.sh), конфиг [`tetris/.claude/settings.json`](tetris/.claude/settings.json) | PostToolUse после Edit/Write: запускает `sh scripts/check.sh`, PASS возвращает агенту как контекст, FAIL — как ошибку; работает и в worktree |
+| MCP | встроенный браузер `mcp__Claude_Browser__*`, конфиг [`tetris/.claude/launch.json`](tetris/.claude/launch.json) | Скриншот и консоль: дизайн по skill нельзя принять без взгляда на результат |
+| Runner | [`tetris/scripts/check.sh`](tetris/scripts/check.sh) | `node --test`, без зависимостей |
+
+| Этап практики | Что было | Подтверждение |
+|---|---|---|
+| Среда | Коммит среды до работы агента | `f4a831d` |
+| Фича A | Субагент: 38 тестов по TDD, хук 12×FAIL → 21×PASS, дизайн «тетрадь в клетку» по плану, по скриншотам найдено и исправлено 5 дефектов | [`A-subagent-report.md`](evidence/tetris/A-subagent-report.md), [`A-hook-log.txt`](evidence/tetris/A-hook-log.txt), [`A-start-screen.jpg`](evidence/tetris/A-start-screen.jpg), [`A-gameplay.jpg`](evidence/tetris/A-gameplay.jpg); коммит `fcdf6e7` |
+| Фича B в worktree | Новый субагент в `git worktree` (ветка `practice-04-b`): призрак, hold, рекорд; 24 теста; найден баг hold по Shift | [`B-subagent-report.md`](evidence/tetris/B-subagent-report.md), [`B-hook-log.txt`](evidence/tetris/B-hook-log.txt) |
+| Review субагентом | Отдельный read-only субагент: 3 замечания; мои решения — 2 исправить, 1 принять и закрепить в правилах | [`B-review.md`](evidence/tetris/B-review.md); коммит `5cd7ad3` |
+| Объединение | `git merge --ff-only practice-04-b`, общая проверка: 65 тестов Тетриса + 11 review-api | — |
+| Handoff | `docs/HANDOFF.md`, новая сессия восстановила состояние и сама прогнала проверку | [`C-handoff.md`](evidence/tetris/C-handoff.md) |
+
+Запуск: `cd practices/practice_04/tetris && python3 -m http.server 5173` → `http://localhost:5173/`.
+
+## 5. Рефлексия
 
 [`reflection.md`](reflection.md).
 
