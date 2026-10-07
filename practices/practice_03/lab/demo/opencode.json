@@ -11,10 +11,25 @@
       },
       "models": {
         "itmo-agent": {
-          "name": "ITMO local 64k",
+          "name": "ITMO local 64k (qwen3.5:9b Q4_K_M)",
+          "tool_call": true,
+          "reasoning": false,
+          "options": {
+            "reasoningEffort": "none"
+          },
           "limit": {
             "context": 65536,
             "output": 4096
+          }
+        },
+        "itmo-agent-think": {
+          "id": "itmo-agent",
+          "name": "ITMO local 64k + thinking (qwen3.5:9b Q4_K_M)",
+          "tool_call": true,
+          "reasoning": true,
+          "limit": {
+            "context": 65536,
+            "output": 8192
           }
         }
       }
@@ -25,6 +40,20 @@
       "description": "Read-only local repository assistant",
       "mode": "primary",
       "prompt": "{file:./repo-system.txt}",
+      "temperature": 0.2,
+      "steps": 8,
+      "permission": {
+        "*": "deny",
+        "read": "allow",
+        "glob": "allow",
+        "grep": "allow"
+      }
+    },
+    "local-guide-strict": {
+      "description": "Read-only assistant: tool call before every answer, file:line evidence",
+      "mode": "primary",
+      "prompt": "{file:./repo-system-strict.txt}",
+      "temperature": 0.2,
       "steps": 8,
       "permission": {
         "*": "deny",
@@ -35,4 +64,3 @@
     }
   }
 }
-
