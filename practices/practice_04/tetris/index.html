@@ -51,6 +51,12 @@
             <span class="label" id="next-label">следующая</span>
             <div class="preview" id="next" role="img" aria-labelledby="next-label"></div>
           </div>
+          <div class="stat stat--next">
+            <span class="label" id="hold-label">отложенная</span>
+            <div class="preview preview--hold" id="hold" role="img" aria-labelledby="hold-label">
+              <span class="hold-hint" id="hold-hint"><span class="hint-keys">клавиша C</span><span class="hint-touch">кнопка ⇄</span></span>
+            </div>
+          </div>
           <div class="stat">
             <span class="label" id="score-label">очки</span>
             <output class="value" id="score" aria-labelledby="score-label">0</output>
@@ -63,15 +69,20 @@
             <span class="label" id="lines-label">строки</span>
             <output class="value" id="lines" aria-labelledby="lines-label">0</output>
           </div>
-
-          <dl class="keys" aria-label="Клавиши">
-            <div><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>сдвиг</dd></div>
-            <div><dt><kbd>↓</kbd></dt><dd>вниз быстрее</dd></div>
-            <div><dt><kbd>↑</kbd> <kbd>X</kbd></dt><dd>поворот</dd></div>
-            <div><dt><kbd>пробел</kbd></dt><dd>сбросить</dd></div>
-            <div><dt><kbd>P</kbd> <kbd>Esc</kbd></dt><dd>пауза</dd></div>
-          </dl>
+          <div class="stat" id="record-stat" hidden>
+            <span class="label" id="record-label">рекорд</span>
+            <output class="value" id="record" aria-labelledby="record-label">0</output>
+          </div>
         </aside>
+
+        <dl class="keys" aria-label="Клавиши">
+          <div><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>сдвиг</dd></div>
+          <div><dt><kbd>↓</kbd></dt><dd>вниз быстрее</dd></div>
+          <div><dt><kbd>↑</kbd> <kbd>X</kbd></dt><dd>поворот</dd></div>
+          <div><dt><kbd>пробел</kbd></dt><dd>сбросить</dd></div>
+          <div><dt><kbd>C</kbd> <kbd>Shift</kbd></dt><dd>отложить</dd></div>
+          <div><dt><kbd>P</kbd> <kbd>Esc</kbd></dt><dd>пауза</dd></div>
+        </dl>
 
         <div class="touch" aria-label="Кнопки управления">
           <button class="touch-button" type="button" data-action="left" aria-label="Сдвиг влево">←</button>
@@ -79,6 +90,7 @@
           <button class="touch-button" type="button" data-action="right" aria-label="Сдвиг вправо">→</button>
           <button class="touch-button" type="button" data-action="soft" aria-label="Вниз быстрее">↓</button>
           <button class="touch-button" type="button" data-action="hard" aria-label="Сбросить вниз">⤓</button>
+          <button class="touch-button" type="button" data-action="hold" aria-label="Отложить фигуру">⇄</button>
           <button class="touch-button" type="button" data-action="pause" aria-label="Пауза">ǁ</button>
         </div>
       </div>

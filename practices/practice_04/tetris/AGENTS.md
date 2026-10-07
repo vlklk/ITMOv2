@@ -6,7 +6,7 @@
 
 - Контракт с фичами A и B и способами проверки: `docs/requirements.md`.
 - Style guide: `docs/style-guide.md` — **прочитай перед любым изменением кода**.
-- Логика: `src/game.js` (чистые функции). Интерфейс: `index.html`, `src/ui.js`, `src/styles.css`.
+- Логика: `src/game.js` (чистые функции). Рекорд в `localStorage`: `src/record.js` (хранилище передаётся параметром). Интерфейс: `index.html`, `src/ui.js`, `src/styles.css`.
 - Пример теста: `tests/smoke.test.js`.
 
 ## Проверка

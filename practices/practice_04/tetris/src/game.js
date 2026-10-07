@@ -142,6 +142,8 @@ export function createGame(seed) {
     lines: 0,
     level: 1,
     over: false,
+    hold: null,
+    holdUsed: false,
   };
 }
 
@@ -174,6 +176,7 @@ function lockPiece(state) {
     level: levelForLines(state.lines + cleared),
     active,
     over: !fits(board, active),
+    holdUsed: false,
     next: drawn.type,
     bag: drawn.bag,
     rng: drawn.rng,
@@ -214,13 +217,30 @@ export function softDrop(state) {
   return { ...state, active: down, score: state.score + 1 };
 }
 
+// B1: позиция, куда упадёт активная фигура при жёстком сбросе (призрачная фигура).
+export function ghostPiece(state) {
+  let piece = state.active;
+  while (fits(state.board, movedDown(piece))) piece = movedDown(piece);
+  return piece;
+}
+
+// B2: текущая фигура откладывается, на её место в точку появления выходит
+// отложенная (или следующая из очереди, если отложенной ещё нет).
+// Не чаще раза до фиксации фигуры; если выходящей фигуре некуда встать — отмена.
+export function hold(state) {
+  if (state.over || state.holdUsed) return state;
+  const fromQueue = state.hold === null;
+  const active = spawnPiece(fromQueue ? state.next : state.hold);
+  if (!fits(state.board, active)) return state;
+  const held = { ...state, active, hold: state.active.type, holdUsed: true };
+  if (!fromQueue) return held;
+  const drawn = drawPiece(state);
+  return { ...held, next: drawn.type, bag: drawn.bag, rng: drawn.rng };
+}
+
 export function hardDrop(state) {
   if (state.over) return state;
-  let piece = state.active;
-  let distance = 0;
-  while (fits(state.board, movedDown(piece))) {
-    piece = movedDown(piece);
-    distance += 1;
-  }
-  return lockPiece({ ...state, active: piece, score: state.score + 2 * distance });
+  const landed = ghostPiece(state);
+  const distance = landed.y - state.active.y;
+  return lockPiece({ ...state, active: landed, score: state.score + 2 * distance });
 }

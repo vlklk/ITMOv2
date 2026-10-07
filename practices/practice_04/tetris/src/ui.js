@@ -8,17 +8,24 @@ import {
   rotate,
   softDrop,
   hardDrop,
+  hold,
   tick,
   dropInterval,
   pieceCells,
   spawnPiece,
+  ghostPiece,
 } from "./game.js";
+import { localStorageOf, readRecord, saveRecord } from "./record.js";
 
 const $ = (id) => document.getElementById(id);
 
 const boardWrap = $("board-wrap");
 const screens = { start: $("screen-start"), pause: $("screen-pause"), over: $("screen-over") };
-const stats = { score: $("score"), level: $("level"), lines: $("lines") };
+const stats = { score: $("score"), level: $("level"), lines: $("lines"), record: $("record") };
+
+// B3: рекорд; null — хранилище недоступно, играем без рекорда.
+const storage = localStorageOf(window);
+let record = readRecord(storage);
 
 // ---------- клетки поля и превью строятся один раз ----------
 
@@ -35,35 +42,66 @@ function buildCells(container, count) {
 
 const boardCells = buildCells($("board"), BOARD_WIDTH * BOARD_HEIGHT);
 const previewCells = buildCells($("next"), 8);
+const holdCells = buildCells($("hold"), 8);
 
-function paint(cell, type) {
+// Клетка фигуры (data-p) или клетка призрачной фигуры (data-g); key — имя атрибута.
+function paint(cell, type, key = "p") {
   if (type) {
-    if (cell.dataset.p !== type) cell.dataset.p = type;
-  } else if (cell.dataset.p) {
-    delete cell.dataset.p;
+    if (cell.dataset[key] !== type) cell.dataset[key] = type;
+  } else if (cell.dataset[key]) {
+    delete cell.dataset[key];
   }
+}
+
+// Превью 4×2: фигура в точке появления, прижатая к левому верхнему углу.
+function paintPreview(cells, type) {
+  const filled = new Set();
+  if (type) {
+    const shape = pieceCells(spawnPiece(type));
+    const minX = Math.min(...shape.map(([x]) => x));
+    const minY = Math.min(...shape.map(([, y]) => y));
+    for (const [x, y] of shape) filled.add((y - minY) * 4 + (x - minX));
+  }
+  cells.forEach((cell, i) => paint(cell, filled.has(i) ? type : null));
 }
 
 const numberFormat = new Intl.NumberFormat("ru-RU");
 
 function render(state) {
   const view = state.board.map((row) => [...row]);
+  const ghost = state.board.map((row) => row.map(() => null));
+  // После проигрыша новая фигура может стоять поверх занятых клеток — призрак не нужен.
+  if (!state.over) {
+    for (const [x, y] of pieceCells(ghostPiece(state))) ghost[y][x] = state.active.type;
+  }
   for (const [x, y] of pieceCells(state.active)) {
-    if (y >= 0 && y < BOARD_HEIGHT && x >= 0 && x < BOARD_WIDTH) view[y][x] = state.active.type;
+    if (y >= 0 && y < BOARD_HEIGHT && x >= 0 && x < BOARD_WIDTH) {
+      view[y][x] = state.active.type;
+      ghost[y][x] = null;
+    }
   }
   view.flat().forEach((type, i) => paint(boardCells[i], type));
+  ghost.flat().forEach((type, i) => paint(boardCells[i], type, "g"));
 
-  // Превью 4×2: фигура в точке появления, прижатая к левому верхнему углу.
-  const cells = pieceCells(spawnPiece(state.next));
-  const minX = Math.min(...cells.map(([x]) => x));
-  const minY = Math.min(...cells.map(([, y]) => y));
-  const filled = new Set(cells.map(([x, y]) => (y - minY) * 4 + (x - minX)));
-  previewCells.forEach((cell, i) => paint(cell, filled.has(i) ? state.next : null));
+  paintPreview(previewCells, state.next);
   $("next").setAttribute("aria-label", `следующая фигура: ${state.next}`);
+
+  const holdBox = $("hold");
+  paintPreview(holdCells, state.hold);
+  holdBox.toggleAttribute("data-empty", state.hold === null);
+  holdBox.toggleAttribute("data-used", state.holdUsed);
+  holdBox.setAttribute(
+    "aria-label",
+    state.hold === null
+      ? "отложенной фигуры нет"
+      : `отложенная фигура: ${state.hold}${state.holdUsed ? ", до следующей фигуры недоступна" : ""}`,
+  );
 
   stats.score.textContent = numberFormat.format(state.score);
   stats.level.textContent = String(state.level);
   stats.lines.textContent = String(state.lines);
+  $("record-stat").hidden = record === null;
+  if (record !== null) stats.record.textContent = numberFormat.format(record);
 }
 
 // ---------- режимы: start → playing ⇄ paused → over ----------
@@ -115,10 +153,16 @@ let finishedAt = 0;
 function finish() {
   mode = "over";
   finishedAt = performance.now();
+  // Новый рекорд — только реально сохранённое превышение прежнего (не первой партии).
+  const previous = record;
+  record = saveRecord(storage, state.score);
+  const beaten = previous > 0 && record > previous;
   $("over-summary").innerHTML =
     `Вы набрали <strong>${numberFormat.format(state.score)}</strong> ` +
     `${plural(state.score, "очко", "очка", "очков")} и собрали ` +
-    `<strong>${state.lines}</strong> ${plural(state.lines, "строку", "строки", "строк")}.`;
+    `<strong>${state.lines}</strong> ${plural(state.lines, "строку", "строки", "строк")}.` +
+    (beaten ? ` <span class="overlay-mark">Это новый рекорд.</span>` : "");
+  render(state);
   showScreen("over");
 }
 
@@ -153,6 +197,9 @@ const KEY_ACTIONS = {
   ArrowUp: rotate,
   KeyX: rotate,
   Space: hardDrop,
+  KeyC: hold,
+  ShiftLeft: hold,
+  ShiftRight: hold,
 };
 
 document.addEventListener("keydown", (event) => {
@@ -165,10 +212,11 @@ document.addEventListener("keydown", (event) => {
       pause();
       return;
     }
-    const action = KEY_ACTIONS[event.code];
+    // Экранные и удалённые клавиатуры иногда шлют Shift с пустым code — тогда по key.
+    const action = KEY_ACTIONS[event.code] ?? (event.key === "Shift" ? hold : undefined);
     if (!action) return;
     event.preventDefault();
-    if (event.repeat && action === hardDrop) return;
+    if (event.repeat && (action === hardDrop || action === hold)) return;
     apply(action);
   } else if (mode === "paused" && isPauseKey) {
     event.preventDefault();
@@ -178,7 +226,14 @@ document.addEventListener("keydown", (event) => {
 
 // ---------- кнопки для касаний: удержание повторяет действие ----------
 
-const TOUCH_ACTIONS = { left: moveLeft, right: moveRight, rotate, soft: softDrop, hard: hardDrop };
+const TOUCH_ACTIONS = {
+  left: moveLeft,
+  right: moveRight,
+  rotate,
+  soft: softDrop,
+  hard: hardDrop,
+  hold,
+};
 const REPEATING = new Set(["left", "right", "soft"]);
 
 for (const button of document.querySelectorAll(".touch-button")) {
