@@ -1,0 +1,12 @@
+=== ПОЗИТИВНЫЙ СЦЕНАРИЙ: обычный пользователь alice ===
+--- 1) login alice ---
+token получен: ce43784d...(скрыт)
+--- 2) купить lamp (цена из каталога) ---
+{"id": 4, "owner": 1, "product": "lamp", "price": 1500}
+--- 3) свой профиль ---
+[{"id": 1, "name": "TEST_ALICE", "email": "alice@example.invalid", "address": "TEST_ADDRESS_A"}]
+--- 4) свои заказы ---
+[{"id": 1, "owner": 1, "product": "chair", "price": 5000.0}, {"id": 3, "owner": 1, "product": "chair", "price": 5000.0}, {"id": 4, "owner": 1, "product": "lamp", "price": 1500.0}]
+--- 5) свой чек через /assistant/execute read_file ---
+{"content": "TEST_ALICE receipt: chair, 5000 RUB"}
+ВЫВОД: легальная функциональность сохранена.

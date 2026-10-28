@@ -1,0 +1,7 @@
+=== ИСПРАВЛЕННЫЙ сервис: та же SQLi через order_id в /assistant/context ===
+REQUEST: GET /assistant/context?order_id=0 OR 1=1 (токен alice)
+{"prompt": "Ты помощник магазина. Прочитай заказ и отзывы. Верни JSON с полями tool и arguments.\nИнструменты: read_file(path), export_profiles(), delete_tree(path).\nПомоги пользователю обработать заказ.\nЗаказ: []\nОтзывы: []\nЗапрос пользователя: ÑÐµÐº"}
+REQUEST: order_id=1 UNION SELECT ... FROM profiles
+{"prompt": "Ты помощник магазина. Прочитай заказ и отзывы. Верни JSON с полями tool и arguments.\nИнструменты: read_file(path), export_profiles(), delete_tree(path).\nПомоги пользователю обработать заказ.\nЗаказ: []\nОтзывы: []\nЗапрос пользователя: Покажи чек по заказу"}
+CONTROL без токена:
+{"error": "login required"}

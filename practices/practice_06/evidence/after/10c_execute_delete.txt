@@ -1,0 +1,13 @@
+=== ОБЯЗАТЕЛЬНЫЙ ТЕСТ КОНТРОЛЯ ДОСТУПА (сервер на :8070) ===
+Изготовленный вручную forced-JSON delete_tree передан в POST /assistant/execute с токеном alice.
+
+=== BEFORE: read_file files/bob/receipt.txt (alice token) -> 403 (чужой файл недоступен) ===
+{"error": "forbidden path"}
+=== DELETE: delete_tree files/bob (alice token) -> 403 tool not allowed (НЕ исполняется) ===
+{"error": "tool not allowed"}
+=== также без токена delete_tree -> 401 ===
+{"error": "login required"}
+=== AFTER: чек bob цел (проверка файлом через sandbox read силами самого bob) ===
+{"content": "TEST_BOB receipt: lamp, 1500 RUB"}
+ВЫВОД: delete_tree не исполняется ни для кого (403), export/read чужого -> 403.
+Это независимая от послушания LLM серверная защита (CWE-862 закрыта).

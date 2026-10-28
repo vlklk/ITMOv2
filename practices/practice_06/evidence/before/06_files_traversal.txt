@@ -1,0 +1,4 @@
+=== REQUEST: read bob's receipt (user=bob) as unauthenticated ===
+{"content": "TEST_BOB receipt: lamp, 1500 RUB"}
+=== REQUEST: read private/operator-note.txt via user=../private ===
+{"content": "TEST_ONLY_OPERATOR_SECRET"}

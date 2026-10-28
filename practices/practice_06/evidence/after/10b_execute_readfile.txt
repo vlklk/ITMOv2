@@ -1,0 +1,8 @@
+=== REQUEST: read_file private/operator-note.txt (alice token) -> 403 ===
+{"error": "forbidden path"}
+=== also bob receipt (alice token) -> 403 ===
+{"error": "forbidden path"}
+=== no token -> 401 ===
+{"error": "login required"}
+=== POSITIVE: alice reads her own file files/alice/receipt.txt -> works ===
+{"content": "TEST_ALICE receipt: chair, 5000 RUB"}

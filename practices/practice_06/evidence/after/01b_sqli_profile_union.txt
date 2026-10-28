@@ -1,0 +1,6 @@
+=== REQUEST (UNION) ===
+curl -s -G 'http://127.0.0.1:8070/profile' -H 'X-Token: <alice>' --data-urlencode 'id=-1 UNION SELECT 99,sqlite_version(),name,sql FROM sqlite_master'
+=== RESPONSE ===
+[{"id": 1, "name": "TEST_ALICE", "email": "alice@example.invalid", "address": "TEST_ADDRESS_A"}]
+=== CONTROL: no token ===
+{"error": "login required"}
