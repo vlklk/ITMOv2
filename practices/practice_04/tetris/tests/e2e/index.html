@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>e2e: тетрис</title>
+    <style>
+      /* Служебная страница проверок, не часть игры: системные шрифты, без внешних ресурсов. */
+      :root {
+        --ink: #22398f;
+        --graphite: #555b66;
+        --pass: #2f9b67;
+        --fail: #d2475a;
+        --paper: #f2f6f9;
+      }
+      body {
+        margin: 0;
+        padding: 16px;
+        background: var(--paper);
+        color: var(--ink);
+        font: 14px/1.4 system-ui, sans-serif;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 20px;
+      }
+      #summary {
+        margin: 8px 0 12px;
+        font-weight: 600;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 1100px;
+      }
+      th,
+      td {
+        padding: 4px 8px;
+        border-bottom: 1px solid #c9ddea;
+        text-align: left;
+        vertical-align: top;
+      }
+      td.params,
+      td.details {
+        color: var(--graphite);
+        font-size: 12px;
+        word-break: break-word;
+      }
+      td.PASS {
+        color: var(--pass);
+        font-weight: 600;
+      }
+      td.FAIL {
+        color: var(--fail);
+        font-weight: 600;
+      }
+      button {
+        font: inherit;
+        padding: 4px 12px;
+      }
+      iframe {
+        display: block;
+        width: 760px;
+        height: 760px;
+        max-width: 100%;
+        margin-top: 16px;
+        border: 1px solid #c9ddea;
+        background: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Сквозные проверки: режимы и подписи (фича 001)</h1>
+    <button type="button" id="run-all">Запустить все</button>
+    <p id="summary" aria-live="polite">Ещё не запускались.</p>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Сценарий</th><th>Требования</th><th>Параметры</th><th>Итог</th><th>Подробности</th><th></th></tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <iframe id="game" title="Игра под проверкой"></iframe>
+
+    <script type="module">
+      import { scenarios, runScenario } from "./harness.js";
+      import "./scenarios/base.js";
+      import "./scenarios/us1.js";
+      import "./scenarios/us2.js";
+      import "./scenarios/us3.js";
+      import "./scenarios/us4.js";
+
+      const order = (id) => Number(id.slice(1));
+      scenarios.sort((a, b) => order(a.id) - order(b.id));
+
+      const frame = document.getElementById("game");
+      const rows = document.getElementById("rows");
+      const summary = document.getElementById("summary");
+      const results = new Map();
+      const cells = new Map();
+
+      for (const item of scenarios) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${item.id}</td><td>${item.title}</td><td>${item.refs}</td><td class="params"></td><td class="status">—</td><td class="details"></td><td><button type="button">запустить</button></td>`;
+        tr.querySelector("button").addEventListener("click", () => runList([item]));
+        rows.append(tr);
+        cells.set(item.id, tr);
+      }
+
+      function show(result) {
+        const tr = cells.get(result.id);
+        tr.querySelector(".params").textContent = result.params;
+        const status = tr.querySelector(".status");
+        status.textContent = result.status;
+        status.className = `status ${result.status}`;
+        tr.querySelector(".details").textContent = result.details;
+      }
+
+      function report(done) {
+        const all = [...results.values()];
+        const passed = all.filter((r) => r.status === "PASS").length;
+        const text = `${passed} из ${all.length} PASS`;
+        summary.textContent = done ? text : `${text} — идёт прогон…`;
+        if (done) document.title = `e2e: ${passed === all.length && all.length > 0 ? "PASS" : "FAIL"}`;
+      }
+
+      let running = false;
+      async function runList(list) {
+        if (running) return;
+        running = true;
+        if (list.length > 1) results.clear();
+        document.title = "e2e: идёт прогон";
+        for (const item of list) {
+          cells.get(item.id).querySelector(".status").textContent = "…";
+          const result = await runScenario(frame, item);
+          results.set(item.id, result);
+          show(result);
+          report(false);
+        }
+        report(true);
+        running = false;
+      }
+
+      document.getElementById("run-all").addEventListener("click", () => runList(scenarios));
+      if (new URLSearchParams(location.search).has("run")) runList(scenarios);
+    </script>
+  </body>
+</html>
