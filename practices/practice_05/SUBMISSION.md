@@ -16,7 +16,7 @@ SDD-фреймворк — **GitHub Spec Kit v1.2.3** (не OpenSpec). Две «
 | Проверки | 207 unit-тестов (`sh scripts/check.sh`): 65 прежних + 121 логика + 21 интерфейс; сквозные — `tests/e2e/index.html`, **18 из 18 PASS** |
 | Сравнение с OpenSpec | [`COMPARISON.md`](COMPARISON.md) |
 | Рефлексия | [`reflection.md`](reflection.md) |
-| Подтверждения | [`evidence/`](evidence/): скриншоты, журнал хука (39 FAIL → 142 PASS за ДЗ 4–5) |
+| Подтверждения | [`evidence/`](evidence/): независимая проверка, скриншоты, журнал хука (39 FAIL → 142 PASS за ДЗ 4–5) |
 
 ## Как шла работа (коммиты ветки `practice_5`)
 
@@ -30,6 +30,7 @@ SDD-фреймворк — **GitHub Spec Kit v1.2.3** (не OpenSpec). Две «
 | `/speckit.implement` 002 | команда логики, TDD с хуком | 121 тест | `19a758d` |
 | `/speckit.implement` 001 | команда UI, TDD + e2e + MCP браузера | 21 тест, e2e 18/18 | `b4f2922` |
 | Приёмка | ведущий | e2e 18/18 в браузере, ручной сценарий спринта и паузы | — |
+| Независимая проверка | отдельный субагент, без права правок | ожидание → факт → доказательство: 11 из 11 PASS, 1 слабый тест — [`evidence/acceptance.md`](evidence/acceptance.md) | — |
 
 ## Демо
 
