@@ -5,6 +5,21 @@ export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 20;
 export const PIECE_TYPES = ["I", "O", "T", "S", "Z", "J", "L"];
 
+// Режимы игры (контракт specs/shared/game-modes-contract.md §2.1). Порядок —
+// порядок на стартовом экране; тексты названий — забота интерфейса.
+export const MODES = Object.freeze([
+  Object.freeze({ id: "marathon", goalLines: null, timeLimitMs: null, resultKind: "score", better: "higher" }),
+  Object.freeze({ id: "sprint", goalLines: 40, timeLimitMs: null, resultKind: "time", better: "lower" }),
+  Object.freeze({ id: "ultra", goalLines: null, timeLimitMs: 120000, resultKind: "score", better: "higher" }),
+]);
+
+// Неизвестный режим — нарушение контракта вызова, а не повод молча играть марафон.
+function findMode(modeId) {
+  const mode = MODES.find((candidate) => candidate.id === modeId);
+  if (!mode) throw new RangeError(`Неизвестный режим игры: ${modeId}`);
+  return mode;
+}
+
 // Базовые матрицы (поворот 0). Остальные повороты — поворот матрицы по часовой.
 const SHAPES = {
   I: ["....", "####", "....", "...."],
@@ -54,8 +69,14 @@ export function fits(board, piece) {
   );
 }
 
+// Новое состояние после вызова: в events — только события этого вызова.
+// Вызов, который ничего не изменил, возвращает вход как есть (контракт §2.2).
+function changed(state, patch, events = []) {
+  return { ...state, ...patch, events };
+}
+
 function tryPlace(state, piece) {
-  return fits(state.board, piece) ? { ...state, active: piece } : state;
+  return fits(state.board, piece) ? changed(state, { active: piece }) : state;
 }
 
 export function moveLeft(state) {
@@ -77,7 +98,7 @@ export function rotate(state) {
   const rotation = (active.rotation + 1) % 4;
   for (const dx of KICKS) {
     const candidate = { ...active, rotation, x: active.x + dx };
-    if (fits(state.board, candidate)) return { ...state, active: candidate };
+    if (fits(state.board, candidate)) return changed(state, { active: candidate });
   }
   return state;
 }
@@ -129,10 +150,12 @@ export function pieceSequence(seed, count) {
   return out;
 }
 
-export function createGame(seed) {
+export function createGame(seed, modeId = "marathon") {
+  const mode = findMode(modeId);
   const first = drawPiece({ bag: [], rng: seed >>> 0 });
   const second = drawPiece(first);
   return {
+    mode: mode.id,
     board: Array.from({ length: BOARD_HEIGHT }, emptyRow),
     active: spawnPiece(first.type),
     next: second.type,
@@ -144,6 +167,14 @@ export function createGame(seed) {
     over: false,
     hold: null,
     holdUsed: false,
+    elapsedMs: 0,
+    remainingMs: mode.timeLimitMs,
+    linesToGoal: mode.goalLines,
+    outcome: "playing",
+    result: null,
+    combo: 0,
+    backToBack: false,
+    events: [],
   };
 }
 
@@ -161,26 +192,55 @@ function clearLines(board) {
 }
 
 // Записывает активную фигуру в поле, удаляет строки и выводит следующую.
-// Если следующая не помещается в точку появления — игра окончена.
+// Спринт заканчивается финишем на 40+ линиях — раньше проверки переполнения.
+// Если следующая не помещается в точку появления — игра окончена (topOut).
 function lockPiece(state) {
+  const mode = findMode(state.mode);
   const placed = state.board.map((row) => [...row]);
   for (const [x, y] of pieceCells(state.active)) placed[y][x] = state.active.type;
   const { board, cleared } = clearLines(placed);
+  const lines = state.lines + cleared;
+  // Комбо — серия фиксаций подряд со строками; «Подряд» — тетрис, если прошлая
+  // фиксация со строками тоже была тетрисом (фиксации без строк её не обрывают).
+  // Бонусы, как и очки за строки, — по уровню до фиксации.
+  const combo = cleared > 0 ? state.combo + 1 : 0;
+  const isTetris = cleared === 4;
+  const backToBackBonus = isTetris && state.backToBack ? 400 * state.level : 0;
+  const comboBonus = combo >= 2 ? 50 * (combo - 1) * state.level : 0;
+  const score = state.score + lineClearPoints(cleared, state.level) + backToBackBonus + comboBonus;
+  const level = levelForLines(lines);
+  // События фиксации для подписей — в порядке контракта §2.4.
+  const events = [];
+  if (isTetris) events.push({ type: "tetris", bonus: 0 });
+  if (backToBackBonus > 0) events.push({ type: "backToBack", bonus: backToBackBonus });
+  if (comboBonus > 0) events.push({ type: "combo", bonus: comboBonus, n: combo });
+  if (level > state.level) events.push({ type: "levelUp", bonus: 0, level });
   const drawn = drawPiece(state);
   const active = spawnPiece(state.next);
-  return {
-    ...state,
+  const next = {
     board,
-    score: state.score + lineClearPoints(cleared, state.level),
-    lines: state.lines + cleared,
-    level: levelForLines(state.lines + cleared),
+    score,
+    lines,
+    combo,
+    backToBack: cleared === 0 ? state.backToBack : isTetris,
+    level,
+    linesToGoal: mode.goalLines === null ? null : Math.max(0, mode.goalLines - lines),
     active,
-    over: !fits(board, active),
     holdUsed: false,
     next: drawn.type,
     bag: drawn.bag,
     rng: drawn.rng,
   };
+  if (mode.goalLines !== null && lines >= mode.goalLines) {
+    const result = Math.round(state.elapsedMs);
+    const finish = { type: "sprintFinish", bonus: 0, timeMs: result };
+    return changed(state, { ...next, outcome: "sprintFinish", over: true, result }, [...events, finish]);
+  }
+  if (!fits(board, active)) {
+    const result = mode.resultKind === "score" ? score : null;
+    return changed(state, { ...next, outcome: "topOut", over: true, result }, events);
+  }
+  return changed(state, next, events);
 }
 
 function movedDown(piece) {
@@ -207,14 +267,14 @@ export function tick(state) {
   if (state.over) return state;
   const down = movedDown(state.active);
   if (!fits(state.board, down)) return lockPiece(state);
-  return { ...state, active: down };
+  return changed(state, { active: down });
 }
 
 export function softDrop(state) {
   if (state.over) return state;
   const down = movedDown(state.active);
   if (!fits(state.board, down)) return lockPiece(state);
-  return { ...state, active: down, score: state.score + 1 };
+  return changed(state, { active: down, score: state.score + 1 });
 }
 
 // B1: позиция, куда упадёт активная фигура при жёстком сбросе (призрачная фигура).
@@ -232,10 +292,27 @@ export function hold(state) {
   const fromQueue = state.hold === null;
   const active = spawnPiece(fromQueue ? state.next : state.hold);
   if (!fits(state.board, active)) return state;
-  const held = { ...state, active, hold: state.active.type, holdUsed: true };
+  const held = changed(state, { active, hold: state.active.type, holdUsed: true });
   if (!fromQueue) return held;
   const drawn = drawPiece(state);
   return { ...held, next: drawn.type, bag: drawn.bag, rng: drawn.rng };
+}
+
+// Игровое время: интерфейс передаёт приращение кадра в мс (без пауз).
+// Некорректное приращение или вызов после конца партии ничего не меняют.
+export function advanceTime(state, deltaMs) {
+  if (state.over || typeof deltaMs !== "number" || !Number.isFinite(deltaMs) || deltaMs <= 0) {
+    return state;
+  }
+  const { timeLimitMs } = findMode(state.mode);
+  if (timeLimitMs === null) return changed(state, { elapsedMs: state.elapsedMs + deltaMs });
+  // Ультра: время не уходит за предел; на пределе партия кончается, а падающая
+  // фигура остаётся как есть — без фиксации и очков.
+  const elapsedMs = Math.min(timeLimitMs, state.elapsedMs + deltaMs);
+  const remainingMs = timeLimitMs - elapsedMs;
+  if (elapsedMs < timeLimitMs) return changed(state, { elapsedMs, remainingMs });
+  const timeUp = { type: "timeUp", bonus: 0, score: state.score };
+  return changed(state, { elapsedMs, remainingMs, outcome: "timeUp", over: true, result: state.score }, [timeUp]);
 }
 
 export function hardDrop(state) {

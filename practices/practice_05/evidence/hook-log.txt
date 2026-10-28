@@ -1,0 +1,181 @@
+2026-10-07T19:18:20Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:18:38Z src/game.js PASS
+2026-10-07T19:19:15Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:19:25Z src/game.js PASS
+2026-10-07T19:19:39Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:19:40Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:19:49Z src/game.js PASS
+2026-10-07T19:20:11Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:20:11Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:20:18Z src/game.js FAIL (exit 1)
+2026-10-07T19:20:28Z src/game.js FAIL (exit 1)
+2026-10-07T19:20:28Z src/game.js PASS
+2026-10-07T19:20:39Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:20:39Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:20:45Z src/game.js FAIL (exit 1)
+2026-10-07T19:20:45Z src/game.js PASS
+2026-10-07T19:20:54Z tests/game.test.js FAIL (exit 1)
+2026-10-07T19:21:39Z src/game.js PASS
+2026-10-07T19:23:34Z docs/design-plan.md PASS
+2026-10-07T19:24:45Z index.html PASS
+2026-10-07T19:25:44Z src/styles.css PASS
+2026-10-07T19:26:06Z src/ui.js PASS
+2026-10-07T19:26:47Z src/styles.css PASS
+2026-10-07T19:26:47Z src/styles.css PASS
+2026-10-07T19:26:47Z src/styles.css PASS
+2026-10-07T19:27:07Z src/styles.css PASS
+2026-10-07T19:27:07Z src/ui.js PASS
+2026-10-07T19:27:07Z src/ui.js PASS
+2026-10-07T19:27:48Z src/ui.js PASS
+2026-10-07T19:27:49Z src/ui.js PASS
+2026-10-07T19:28:00Z src/styles.css PASS
+2026-10-07T19:28:21Z src/styles.css PASS
+2026-10-07T19:28:21Z src/styles.css PASS
+2026-10-07T19:47:26Z docs/HANDOFF.md PASS
+2026-10-27T13:05:42Z .specify/memory/constitution.md PASS
+2026-10-27T13:10:40Z specs/001-game-modes-ui/spec.md PASS
+2026-10-27T13:10:54Z specs/002-game-modes-logic/spec.md PASS
+2026-10-27T13:11:13Z specs/002-game-modes-logic/spec.md PASS
+2026-10-27T13:11:13Z specs/002-game-modes-logic/spec.md PASS
+2026-10-27T13:11:21Z specs/001-game-modes-ui/checklists/requirements.md PASS
+2026-10-27T13:11:26Z specs/002-game-modes-logic/checklists/requirements.md PASS
+2026-10-27T13:16:52Z specs/shared/game-modes-contract.md PASS
+2026-10-27T13:17:03Z specs/shared/game-modes-contract.md PASS
+2026-10-27T13:19:53Z specs/shared/game-modes-contract.md PASS
+2026-10-27T13:23:03Z specs/001-game-modes-ui/checklists/requirements.md PASS
+2026-10-27T13:23:16Z specs/002-game-modes-logic/spec.md PASS
+2026-10-27T13:23:46Z specs/002-game-modes-logic/checklists/requirements.md PASS
+2026-10-27T13:27:29Z specs/002-game-modes-logic/plan.md PASS
+2026-10-27T13:27:29Z specs/002-game-modes-logic/research.md PASS
+2026-10-27T13:28:23Z specs/002-game-modes-logic/data-model.md PASS
+2026-10-27T13:28:23Z specs/002-game-modes-logic/contracts/README.md PASS
+2026-10-27T13:28:23Z specs/002-game-modes-logic/quickstart.md PASS
+2026-10-27T13:28:40Z specs/001-game-modes-ui/plan.md PASS
+2026-10-27T13:29:40Z specs/001-game-modes-ui/research.md PASS
+2026-10-27T13:29:50Z specs/001-game-modes-ui/research.md PASS
+2026-10-27T13:30:44Z specs/001-game-modes-ui/data-model.md PASS
+2026-10-27T13:30:44Z specs/001-game-modes-ui/contracts/README.md PASS
+2026-10-27T13:30:44Z specs/001-game-modes-ui/contracts/ui-test-hooks.md PASS
+2026-10-27T13:30:44Z specs/001-game-modes-ui/quickstart.md PASS
+2026-10-27T13:31:00Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:32:31Z specs/001-game-modes-ui/tasks.md PASS
+2026-10-27T13:41:42Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:41:42Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:41:42Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:41:42Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:42:15Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:42:15Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:42:15Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:42:15Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:42:15Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:42:16Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:42:16Z specs/002-game-modes-logic/spec.md PASS
+2026-10-27T13:42:36Z tests/support.js PASS
+2026-10-27T13:42:49Z tests/contract.test.js FAIL (exit 1)
+2026-10-27T13:42:58Z tests/modes.test.js FAIL (exit 1)
+2026-10-27T13:43:08Z src/game.js FAIL (exit 1)
+2026-10-27T13:43:08Z src/game.js FAIL (exit 1)
+2026-10-27T13:43:09Z src/game.js FAIL (exit 1)
+2026-10-27T13:43:24Z tests/modes.test.js FAIL (exit 1)
+2026-10-27T13:43:34Z tests/modes.test.js FAIL (exit 1)
+2026-10-27T13:43:45Z src/game.js PASS
+2026-10-27T13:43:55Z tests/events.test.js FAIL (exit 1)
+2026-10-27T13:44:17Z src/game.js FAIL (exit 1)
+2026-10-27T13:44:17Z src/game.js FAIL (exit 1)
+2026-10-27T13:44:18Z src/game.js FAIL (exit 1)
+2026-10-27T13:44:18Z src/game.js FAIL (exit 1)
+2026-10-27T13:44:18Z src/game.js FAIL (exit 1)
+2026-10-27T13:44:18Z src/game.js FAIL (exit 1)
+2026-10-27T13:44:23Z src/game.js PASS
+2026-10-27T13:44:50Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:50Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:50Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:50Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:51Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:51Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:51Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:51Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:51Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:51Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:44:51Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:45:13Z tests/modes.test.js PASS
+2026-10-27T13:45:13Z tests/modes.test.js FAIL (exit 1)
+2026-10-27T13:45:27Z src/game.js PASS
+2026-10-27T13:45:36Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:45:36Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:45:36Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:45:37Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:45:47Z tests/modes.test.js FAIL (exit 1)
+2026-10-27T13:45:53Z src/game.js PASS
+2026-10-27T13:46:03Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:46:03Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:46:03Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:46:03Z tests/contract.test.js PASS
+2026-10-27T13:46:11Z tests/contract.test.js FAIL (exit 1)
+2026-10-27T13:46:33Z tests/mode-record.test.js FAIL (exit 1)
+2026-10-27T13:46:45Z src/record.js FAIL (exit 1)
+2026-10-27T13:46:45Z src/record.js PASS
+2026-10-27T13:46:49Z specs/001-game-modes-ui/tasks.md PASS
+2026-10-27T13:47:17Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:47:17Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:47:18Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:47:18Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:47:18Z tests/scoring.test.js FAIL (exit 1)
+2026-10-27T13:47:32Z src/game.js PASS
+2026-10-27T13:47:42Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:47:42Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:47:43Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:48:05Z tests/contract.test.js PASS
+2026-10-27T13:48:05Z tests/contract.test.js FAIL (exit 1)
+2026-10-27T13:48:25Z tests/events.test.js FAIL (exit 1)
+2026-10-27T13:48:25Z tests/events.test.js FAIL (exit 1)
+2026-10-27T13:48:38Z src/game.js FAIL (exit 1)
+2026-10-27T13:48:38Z src/game.js FAIL (exit 1)
+2026-10-27T13:48:38Z src/game.js PASS
+2026-10-27T13:48:49Z tests/events.test.js FAIL (exit 1)
+2026-10-27T13:48:49Z tests/events.test.js PASS
+2026-10-27T13:48:50Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:48:50Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:48:50Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:48:50Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:49:03Z tests/events.test.js PASS
+2026-10-27T13:50:53Z docs/HANDOFF.md PASS
+2026-10-27T13:50:53Z docs/HANDOFF.md PASS
+2026-10-27T13:51:07Z docs/requirements.md PASS
+2026-10-27T13:51:17Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:51:17Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:51:17Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:51:17Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:51:18Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-27T13:51:18Z specs/002-game-modes-logic/tasks.md PASS
+2026-10-28T16:23:27Z .specify/feature.json PASS
+2026-10-28T16:24:17Z docs/design-plan.md PASS
+2026-10-28T16:24:36Z tests/format.test.js FAIL (exit 1)
+2026-10-28T16:24:50Z src/format.js PASS
+2026-10-28T16:25:00Z tests/ui-contract.test.js PASS
+2026-10-28T16:27:25Z tests/e2e/harness.js PASS
+2026-10-28T16:27:39Z tests/e2e/planner.js PASS
+2026-10-28T16:28:12Z tests/e2e/scenarios/fixtures.js PASS
+2026-10-28T16:29:41Z tests/e2e/scenarios/base.js PASS
+2026-10-28T16:29:41Z tests/e2e/scenarios/us1.js PASS
+2026-10-28T16:29:41Z tests/e2e/scenarios/us2.js PASS
+2026-10-28T16:29:42Z tests/e2e/scenarios/us3.js PASS
+2026-10-28T16:29:42Z tests/e2e/scenarios/us4.js PASS
+2026-10-28T16:30:00Z tests/e2e/index.html PASS
+2026-10-28T16:31:33Z index.html PASS
+2026-10-28T16:31:33Z index.html PASS
+2026-10-28T16:31:33Z index.html PASS
+2026-10-28T16:32:32Z src/ui.js PASS
+2026-10-28T16:32:51Z src/styles.css PASS
+2026-10-28T16:32:51Z src/styles.css PASS
+2026-10-28T16:32:51Z src/styles.css PASS
+2026-10-28T16:38:03Z tests/e2e/harness.js PASS
+2026-10-28T18:38:15Z tests/e2e/scenarios/fixtures.js PASS
+2026-10-28T18:38:15Z tests/e2e/harness.js PASS
+2026-10-28T18:38:15Z tests/e2e/scenarios/us3.js PASS
+2026-10-28T18:39:09Z src/ui.js PASS
+2026-10-28T18:39:37Z specs/001-game-modes-ui/tasks.md PASS
+2026-10-28T18:39:37Z specs/001-game-modes-ui/tasks.md PASS
+2026-10-28T18:39:37Z specs/001-game-modes-ui/tasks.md PASS
+2026-10-28T18:39:55Z docs/HANDOFF.md PASS
+2026-10-28T18:39:55Z docs/HANDOFF.md PASS

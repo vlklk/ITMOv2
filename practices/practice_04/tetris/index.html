@@ -27,22 +27,35 @@
         <section class="board-wrap" id="board-wrap" tabindex="-1" aria-label="Игровое поле">
           <div class="board" id="board" aria-hidden="true"></div>
 
+          <div class="caption" id="caption" aria-hidden="true" hidden></div>
+
           <div class="overlay" id="screen-start" role="dialog" aria-labelledby="start-title">
             <h2 class="overlay-title" id="start-title">Новая партия</h2>
-            <p class="overlay-text">Двигайте и поворачивайте фигуры, собирайте полные строки — они исчезают и приносят очки.</p>
+            <div class="modes" id="mode-list" role="group" aria-label="Режим игры"></div>
             <button class="button" type="button" id="start-button" autofocus>Начать игру</button>
           </div>
 
           <div class="overlay" id="screen-pause" role="dialog" aria-labelledby="pause-title" hidden>
             <h2 class="overlay-title overlay-title--mark" id="pause-title">Пауза</h2>
+            <p class="overlay-text" id="pause-time-line" hidden>Время остановлено: <strong id="pause-time"></strong></p>
             <p class="overlay-text">Нажмите P или Esc, чтобы продолжить.</p>
-            <button class="button" type="button" id="resume-button">Продолжить</button>
+            <div class="overlay-actions">
+              <button class="button" type="button" id="resume-button">Продолжить</button>
+              <button class="button button--quiet" type="button" id="menu-button">К выбору режима</button>
+            </div>
           </div>
 
           <div class="overlay" id="screen-over" role="dialog" aria-labelledby="over-title" hidden>
             <h2 class="overlay-title overlay-title--mark" id="over-title">Игра окончена</h2>
-            <p class="overlay-text" id="over-summary" aria-live="polite"></p>
-            <button class="button" type="button" id="again-button">Играть снова</button>
+            <div aria-live="polite">
+              <p class="overlay-text" id="over-summary"></p>
+              <p class="overlay-text" id="over-best" hidden></p>
+              <p class="overlay-mark" id="over-mark" hidden>Это новый рекорд.</p>
+            </div>
+            <div class="overlay-actions">
+              <button class="button" type="button" id="again-button">Играть снова</button>
+              <button class="button button--quiet" type="button" id="modes-button">Выбрать режим</button>
+            </div>
           </div>
         </section>
 
@@ -57,15 +70,19 @@
               <span class="hold-hint" id="hold-hint"><span class="hint-keys">клавиша C</span><span class="hint-touch">кнопка ⇄</span></span>
             </div>
           </div>
+          <div class="stat" id="time-stat" hidden>
+            <span class="label" id="time-label">время</span>
+            <output class="value" id="time" aria-labelledby="time-label">0:00,00</output>
+          </div>
           <div class="stat">
             <span class="label" id="score-label">очки</span>
             <output class="value" id="score" aria-labelledby="score-label">0</output>
           </div>
-          <div class="stat">
+          <div class="stat" id="level-stat">
             <span class="label" id="level-label">уровень</span>
             <output class="value" id="level" aria-labelledby="level-label">1</output>
           </div>
-          <div class="stat">
+          <div class="stat" id="lines-stat">
             <span class="label" id="lines-label">строки</span>
             <output class="value" id="lines" aria-labelledby="lines-label">0</output>
           </div>
@@ -93,6 +110,8 @@
           <button class="touch-button" type="button" data-action="hold" aria-label="Отложить фигуру">⇄</button>
           <button class="touch-button" type="button" data-action="pause" aria-label="Пауза">ǁ</button>
         </div>
+
+        <p class="visually-hidden" id="announcer" aria-live="polite"></p>
       </div>
     </main>
   </body>
