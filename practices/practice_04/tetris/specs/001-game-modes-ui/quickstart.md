@@ -23,7 +23,7 @@ python3 -m http.server 5173
 
 Открыть `http://localhost:5173/tests/e2e/index.html` → «Запустить все».
 
-Ожидается: все строки E0–E14 — PASS, итог «15 из 15 PASS», заголовок вкладки `e2e: PASS`, ошибок страницы нет.
+Ожидается: все строки E0–E17 — PASS, итог «18 из 18 PASS», заголовок вкладки `e2e: PASS`, ошибок страницы нет.
 
 Агент: MCP встроенного браузера — `preview_start` с `name: "tetris"`, перейти на `/tests/e2e/index.html`, нажать «Запустить все», прочитать итог (`get_page_text`), `read_console_messages` — без ошибок.
 
