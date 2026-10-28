@@ -1,0 +1,6 @@
+=== REQUEST: POST /assistant/execute tool=export_profiles (NO token) ===
+{"error": "login required"}
+=== REQUEST: export_profiles with alice (customer) token -> 403 ===
+{"error": "staff only"}
+=== POSITIVE: export_profiles with staff token -> allowed ===
+[{"id": 1, "name": "TEST_ALICE", "email": "alice@example.invalid", "address": "TEST_ADDRESS_A"}, {"id": 2, "name": "TEST_BOB", "email": "bob@example.invalid", "address": "TEST_ADDRESS_B"}]

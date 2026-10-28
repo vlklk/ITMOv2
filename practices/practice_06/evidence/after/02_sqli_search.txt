@@ -1,0 +1,8 @@
+=== REQUEST ===
+curl -s -G 'http://127.0.0.1:8070/search' -H 'X-Token: <alice>' --data-urlencode "q=' UNION SELECT id,email,address,name FROM profiles-- "
+=== RESPONSE ===
+[]
+--- baseline (empty q) ---
+[{"id": 1, "name": "TEST_ALICE", "email": "alice@example.invalid", "address": "TEST_ADDRESS_A"}, {"id": 2, "name": "TEST_BOB", "email": "bob@example.invalid", "address": "TEST_ADDRESS_B"}]
+=== CONTROL: no token ===
+{"error": "login required"}

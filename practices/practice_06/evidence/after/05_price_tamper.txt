@@ -1,0 +1,2 @@
+=== REQUEST: POST /orders chair price=1 (alice token) ===
+{"id": 3, "owner": 1, "product": "chair", "price": 5000}

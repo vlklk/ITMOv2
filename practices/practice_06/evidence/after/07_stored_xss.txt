@@ -1,0 +1,4 @@
+=== REQUEST: POST /reviews with script payload ===
+{"saved": true}
+=== REQUEST: GET /reviews/view (now escaped) ===
+<html><body><p>&lt;script&gt;alert(document.cookie)&lt;/script&gt;&lt;img src=x onerror=alert(1)&gt;</p></body></html>

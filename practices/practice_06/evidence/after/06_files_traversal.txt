@@ -1,0 +1,12 @@
+=== REQUEST: read bob's receipt (user=bob) with alice token ===
+{"content": "TEST_ALICE receipt: chair, 5000 RUB"}
+=== REQUEST: read private/operator-note.txt via user=../private (alice token) ===
+{"error": "internal server error"}
+=== CONTROL: no token ===
+{"error": "login required"}
+=== POSITIVE: alice reads her own receipt ===
+{"content": "TEST_ALICE receipt: chair, 5000 RUB"}
+=== EXTRA: explicit traversal via path param ../private/operator-note.txt (alice token) -> 403 ===
+{"error": "forbidden path"}
+=== EXTRA: traversal via path param ../bob/receipt.txt (alice token) -> 403 ===
+{"error": "forbidden path"}
