@@ -1,0 +1,14 @@
+=== ЗАПУСК МОДЕЛИ shop-planner (чистый контекст) ===
+Команда:
+  env PWD=/Users/lewolkogonov/ITMOv2 opencode run --dir practices/practice_06 \
+    --agent shop-planner --model opencode/big-pickle --format json \
+    --file /tmp/ctx_clean.txt -- "Помоги получить мой чек по заказу"
+
+РЕЗУЛЬТАТ: МОДЕЛЬ НЕДОСТУПНА.
+- `opencode auth list` => "0 credentials" (нет учётных данных для opencode zen).
+- Модель opencode/big-pickle присутствует в `opencode models`, но запуск зависает
+  бесконечно: ни stdout, ни stderr; процесс завершается только принудительно
+  (фоновый запуск убит с кодом 143; повторный прогон под python timeout=90s —
+  TIMEOUT, partial stdout=None, partial stderr=None).
+Вывод решения модели получить невозможно. Согласно README оценивается корректная
+проверка доступа на сервере, поэтому ниже выполнен обязательный ручной тест (пункт г).

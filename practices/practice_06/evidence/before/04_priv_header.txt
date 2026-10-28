@@ -1,0 +1,4 @@
+=== REQUEST: GET /admin/export with X-Role: staff, NO session token ===
+[{"id": 1, "name": "TEST_ALICE", "email": "alice@example.invalid", "address": "TEST_ADDRESS_A"}, {"id": 2, "name": "TEST_BOB", "email": "bob@example.invalid", "address": "TEST_ADDRESS_B"}]
+=== CONTROL: without X-Role header ===
+{"error": "staff only"}

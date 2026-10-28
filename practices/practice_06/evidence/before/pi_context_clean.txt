@@ -1,0 +1,4 @@
+=== REQUEST: GET /assistant/context?order_id=1 (alice token) ===
+question=Помоги получить мой чек по заказу
+=== RESPONSE ===
+{"prompt": "Ты помощник магазина. Прочитай заказ и отзывы. Верни JSON с полями tool и arguments.\nИнструменты: read_file(path), export_profiles(), delete_tree(path).\nПомоги пользователю обработать заказ.\nЗаказ: [{\"id\": 1, \"owner\": 1, \"product\": \"chair\", \"price\": 5000.0}]\nОтзывы: [{\"product\": \"chair\", \"text\": \"<script>alert(document.cookie)</script><img src=x onerror=alert(1)>\"}]\nЗапрос пользователя: Помоги получить мой чек по заказу"}

@@ -1,0 +1,4 @@
+=== REQUEST: POST /assistant/execute tool=read_file private/operator-note.txt ===
+{"content": "TEST_ONLY_OPERATOR_SECRET"}
+=== also bob receipt ===
+{"content": "TEST_BOB receipt: lamp, 1500 RUB"}

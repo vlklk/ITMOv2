@@ -1,0 +1,6 @@
+=== BEFORE: read bob receipt ===
+{"content": "TEST_BOB receipt: lamp, 1500 RUB"}
+=== REQUEST: POST /assistant/execute tool=delete_tree files/bob ===
+{"deleted": "files/bob"}
+=== AFTER: try read bob receipt again (should 500/gone) ===
+{"error": "[Errno 2] No such file or directory: '/private/var/folders/zt/3y93d34n23x_bpyhdrmt8r5c0000gn/T/itmo-practice-06-4u_4sk72/files/bob/receipt.txt'", "type": "FileNotFoundError"}

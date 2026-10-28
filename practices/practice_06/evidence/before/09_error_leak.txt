@@ -1,0 +1,6 @@
+=== REQUEST: GET /profile?id=abc (invalid -> 500) ===
+curl -s -G 'http://127.0.0.1:8066/profile' --data-urlencode 'id=abc'
+=== RESPONSE BODY ===
+{"error": "no such column: abc", "type": "OperationalError"}
+=== HTTP status line ===
+500

